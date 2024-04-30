@@ -1,0 +1,52 @@
+<%- include('header.ejs') %>
+  <h2>수정페이지</h2>
+  <form action="/update" method="post">
+    <input type="hidden" name="_method" value="PUT">
+    <input hidden type="text" name="id">
+    <label>
+      <span>할일입력 :</span>
+      <input type="text" name="title" placeholder="할일입력" required>
+    </label>
+    <label>
+      종료예정일 :
+      <input type="date" name="dateOfGoals" required>
+    </label>
+    <label hidden>작성일 <input type="date" name="today"></label>
+    <button class="submitBtn">수정</button>
+  </form>
+  <p class="alertmessage"></p>
+
+  <script>
+    const idInput = document.querySelector('input[name="id"]')
+    const titleInput = document.querySelector('input[name="title"]')
+    const goalsInput = document.querySelector('input[name="dateOfGoals"]')
+    const todayInput = document.querySelector('input[name="today"]')
+    const submitBtn = document.querySelector('.submitBtn')
+    const alertmessage = document.querySelector('.alertmessage')
+
+    idInput.value = `<%= post._id %>`
+    titleInput.value = `<%= post.title %>`
+    goalsInput.value = `<%= post.dateOfGoals %>`
+      
+    let today = new Date().toISOString().slice(0,10)
+    todayInput.value = today
+
+    submitBtn.addEventListener('click', (e)=>{
+      e.preventDefault()
+
+      let title= titleInput.value
+      let dateOfGoals = goalsInput.value
+
+      if(!title || !dateOfGoals) {
+        alertmessage.innerHTML= '할일과 종료일을 입력해 주세요'
+        return
+      }
+      if(new Date(dateOfGoals) < new Date(today)) {
+        alertmessage.innerHTML ='목표일은 오늘 날자 이후로 선택해 주세요'
+        return
+      }
+
+      document.querySelector('form').submit()
+    })
+  </script>
+<%- include('footer.ejs') %>
