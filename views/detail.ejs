@@ -5,36 +5,32 @@
     <p><%= post.title %></p>
     <p><%= post.dateOfGoals %></p>
 
-    <a href="/edit/<%= post._id %>">수정하기</a>
     <button class="delBtn" data-postnum="<%= post._id %>">삭제하기</button>
-    <a href="/list">목록으로 이동</a>
+    <a href="/edit/<%= post._id %>">수정하기</a>
+    <a href="/list">목록으로이동</a>
   </div>
 
   <script>
     const deleteBtn = document.querySelector('.delBtn')
     deleteBtn.addEventListener('click', (e)=>{
-      // POST 요청으로 DELETE 작업 수행
-      // fetch().then()
+      //POST 요청으로 DELETE 작업 수행
+      //    fetch().then()
       fetch('/delete', {
-        method: 'POST',
-        headers: {
+        method:'POST',
+        headers:{
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          postNum: e.target.dataset.postnum
+        body :JSON.stringify({
+          postNum : e.target.dataset.postnum
         })
-      }).then(res =>{
-        // 성공했을 경우 [ res.] /list 페이지로 이동
-        // 실패했을 경우 '삭제실패' 알림
+      }).then(res => {
         // console.log(res.ok);
         if(res.ok){
-          location.href = '/list'
-        } else {
+          location.href='/list'
+        }else{
           console.log('삭제실패');
         }
       })
-
-      
     })
   </script>
 

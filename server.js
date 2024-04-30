@@ -1,5 +1,4 @@
 const express = require('express');
-const cors = require('cors');
 const app = express(); // express() 함수를 app 이라는 변수에 담아서 앞으로 요소들을 꺼내쓸것임
 const port = 3000;
 
@@ -10,14 +9,9 @@ const client = new MongoClient(url);
 app.set('view engine', 'ejs'); // ejs 초기 세팅 // ejs 파일이 들어있는 폴더가 기본값으로 됨
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); // 이 코드와 윗 코드 : body 에 담겨져있는 요소들을 객체형태로 가져오기 위함
-app.use(cors());
 
 const methodOverride = require('method-override')
 app.use(methodOverride('_method'))
-
-app.get('/products/:id', function (req, res, next) {
-  res.json({msg: 'This is CORS-enabled for all origins!'})
-});
 
 // 쓰기 페이지
 app.get('/', (req, res) => {
@@ -26,15 +20,15 @@ app.get('/', (req, res) => {
   res.render('index'); // 그래서 따로 ./ 경로를 쓰지 않아도 됨 // 확장자는 생략 가능함. 모든 확장자를 ejs 로 쓸 것이기 때문에
 });
 
-const getDB = async () => {
-  await client.connect();
-  return client.db('todo');
+const getDB = async ()=> {
+  await client.connect()
+  return client.db('todo')
 };
 
 app.get('/list', async (req, res) => {
   try {
     const db = await getDB();
-    const posts = await db.collection('posts').find().sort({ _id: -1 }).toArray();
+    const posts =  await db.collection('posts').find().sort({_id:-1}).toArray();
     // console.log(posts);
     res.render('list', { posts }); // {posts: posts}
   } catch (error) {
@@ -48,7 +42,7 @@ app.post('/add', async (req, res) => {
   // 받아온 정보를 mongodb 에 저장
   try {
     const db = await getDB();
-    const result = await db.collection('counter').findOne({ name: 'counter' });
+    const result =  await db.collection('counter').findOne({name : "counter"});
     console.log(result.totalPost);
     await db.collection('posts').insertOne({ _id: result.totalPost + 1, title, dateOfGoals, today });
     await db.collection('counter').updateOne({ name: 'counter' }, { $inc: { totalPost: 1 } });
@@ -102,7 +96,7 @@ app.post('/update', async (req, res) => {
   console.log(id);
   try {
     const db = await getDB();
-    await db.collection('posts').updateOne({_id:parseInt(id)}, {$set:{ title, dateOfGoals, today }})
+    await db.collection('posts').updateOne({_id:parseInt(id)},{$set:{title, dateOfGoals, today}})
     res.redirect('/list');
   } catch(error) {
     console.log(error);

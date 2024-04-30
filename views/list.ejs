@@ -1,15 +1,14 @@
 <%- include('header.ejs') %>
-<h2>목록보기 페이지</h2>
-<ul>
-  <%- posts.length == 0 ? `
-  <li>등록된 리스트가 없습니다</li>
-  ` : posts.map(post => `
-  <li>
-    <p>${post._id}</p>
-    <p>${post.title}</p>
-    <p>${post.dateOfGoals}</p>
-    <a href="/detail/${post._id}">상세페이지</a>
-  </li>
-  `).join('') %>
-</ul>
+  <h2>목록보기 페이지</h2>
+  <ul>
+    <%- posts.length == 0 ? `<li>등록된 리스트가 없습니다</li>` : posts.map(post => `
+      <li>
+        <p>${post._id}</p>
+        <p>${post.title}</p>
+        <p>${post.dateOfGoals}</p>
+        <!-- <button>삭제</button> -->
+        <a href="/detail/${post._id}">상세페이지</a>
+      </li>
+    `).join('') %>
+  </ul>
 <%- include('footer.ejs') %>
